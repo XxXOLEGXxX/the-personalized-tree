@@ -1,5 +1,5 @@
 let modInfo = {
-	name: "The Personalized Tree",
+	name: "Oleg's Nostalgic Tree",
 	id: "myolegtest1",
 	author: "nobody",
 	pointsName: "points",
@@ -13,8 +13,8 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1",
-	name: "Literally nothing",
+	num: "0.2",
+	name: "A little bit better",
 }
 
 function getFactorialEquilavent(){
@@ -22,9 +22,16 @@ function getFactorialEquilavent(){
 }
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.1</h3><br>
-		- Added Factorial Tree.<br>
-		- Added Cookie Tree.`
+	<h3>v0.2: A little bit better</h3><br>
+		- Renamed "The Personalized Tree" to "Oleg's Nostalgic Tree"<br>
+		- Fixed various bugs<br>
+		- Rebalanced everything due aforementioned bugs<br>
+		- Stylized each tree in their own way<br>
+		- Added Upgrade Tree<br>
+		- Added Paradox Tree<br>
+	<h3>v0.1: Literally nothing</h3><br>
+		- Added Factorial Tree<br>
+		- Added Cookie Tree`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 
@@ -42,6 +49,49 @@ function canGenPoints(){
 }
 
 // Calculate points/sec!
+
+function getPointGen2() {
+	if(!canGenPoints())
+		return new Decimal(0)
+
+	let gain = tmp.f.buyables[11].effect
+    gain = gain.mul(tmp.f.buyables[12].effect)
+    
+    gain = gain.mul(tmp.a.effect)
+    gain = gain.mul(hasUpgrade("a",11)?getFactorialEquilavent():1)
+    gain = gain.mul(hasUpgrade("a",12)?upgradeEffect("a",12):1)
+    gain = gain.mul(hasUpgrade("a",14)?upgradeEffect("a",14):1)
+    gain = gain.mul(hasUpgrade("a",23)?player.achievements.bestFactorial:1)
+    
+    gain = gain.div(
+        inChallenge("a",12) ?
+        player.f.total.mul(2).add(1).factorial().div(hasUpgrade("a",22)?tmp.a.effect.root(1.69):1) :
+        inChallenge("a",11) ?
+        player.f.total.add(1).factorial().factorial().div(hasUpgrade("a",22)?tmp.a.effect.root(1.69):1) :
+        player.f.total.add(1).factorial().div(hasUpgrade("a",22)?tmp.a.effect.root(1.69):1)
+    )
+    gain = gain.mul(new Decimal(1.15).pow(player.a.challengeScore).pow(player.f.total))
+    gain = gain.mul(new Decimal(1.3).pow(player.a.challengeScore2))
+    gain = gain.mul(hasAchievement("achievements","f23")?new Decimal(1.5).pow(bingoAttemptTwo()):1)
+    gain = gain.mul(player.points.lt(1)&&hasAchievement("achievements","f32")?3:1)
+    
+    
+    if(hasAchievement("achievements","f16")) gain = gain.mul(player.bb.points.mul(0.1).mul(tmp.bb.kittenPower).mul(new Decimal(1.1).pow(player.bb.prestiges)).add(1))
+    if(hasUpgrade("bb",13)) gain = gain.mul(player.bb.cookies.add(1).log(10).add(1).root(2))
+    if(hasUpgrade("bb",32)) gain = gain.mul(tmp.bb.buyables[11].cps.root(3).add(tmp.bb.buyables[21].cps.root(3)).add(tmp.bb.buyables[31].cps.root(3)).add(1).root(3))
+        
+    if(hasAchievement("achievements","f34")) gain = gain.mul(tmp.c.effect)
+        
+    if(hasUpgrade("u",11)) gain = gain.mul(tmp.u.effect)
+    if(hasUpgrade("wu",11)) gain = gain.mul(6)
+    if(hasUpgrade("wu",12)) gain = gain.mul(9)
+    if(hasUpgrade("wu",13)) gain = gain.mul(6)
+    if(hasUpgrade("wu",14)) gain = gain.mul(9)
+        
+    if(hasAchievement("achievements","f53")) gain = gain.mul(tmp.p.effect)
+    return gain
+}
+
 function getPointGen() {
 	if(!canGenPoints())
 		return new Decimal(0)
@@ -57,21 +107,32 @@ function getPointGen() {
     
     gain = gain.div(
         inChallenge("a",12) ?
-        player.f.total.mul(2).add(1).factorial().div(hasUpgrade("a",21)?player.a.points.add(1).log(3).add(1):1) :
+        player.f.total.mul(2).add(1).factorial().div(hasUpgrade("a",22)?tmp.a.effect.root(1.69):1) :
         inChallenge("a",11) ?
-        player.f.total.add(1).factorial().factorial().div(hasUpgrade("a",21)?player.a.points.add(1).log(3).add(1):1) :
-        player.f.total.add(1).factorial().div(hasUpgrade("a",21)?player.a.points.add(1).log(3).add(1):1)
+        player.f.total.add(1).factorial().factorial().div(hasUpgrade("a",22)?tmp.a.effect.root(1.69):1) :
+        player.f.total.add(1).factorial().div(hasUpgrade("a",22)?tmp.a.effect.root(1.69):1)
     )
     gain = gain.mul(new Decimal(1.15).pow(player.a.challengeScore).pow(player.f.total))
     gain = gain.mul(new Decimal(1.3).pow(player.a.challengeScore2))
-    gain = gain.mul(hasAchievement("achievements",24)?new Decimal(1.5).pow(bingoAttemptTwo()):1)
-    gain = gain.mul(player.points.lt(1)&&hasAchievement("achievements",32)?3:1)
+    gain = gain.mul(hasAchievement("achievements","f23")?new Decimal(1.5).pow(bingoAttemptTwo()):1)
+    gain = gain.mul(player.points.lt(1)&&hasAchievement("achievements","f32")?3:1)
+    
     
     if(hasAchievement("achievements","f16")) gain = gain.mul(player.bb.points.mul(0.1).mul(tmp.bb.kittenPower).mul(new Decimal(1.1).pow(player.bb.prestiges)).add(1))
     if(hasUpgrade("bb",13)) gain = gain.mul(player.bb.cookies.add(1).log(10).add(1).root(2))
+    if(hasUpgrade("bb",32)) gain = gain.mul(tmp.bb.buyables[11].cps.root(3).add(tmp.bb.buyables[21].cps.root(3)).add(tmp.bb.buyables[31].cps.root(3)).add(1).root(3))
         
     if(hasAchievement("achievements","f34")) gain = gain.mul(tmp.c.effect)
-    if(getFactorialEquilavent().gte(20)||gain.gte(new Decimal(20).factorial())) gain = gain.pow(0.5).times(new Decimal(20).factorial().pow(Decimal.sub(1, 0.5)))
+        
+    if(hasUpgrade("u",11)) gain = gain.mul(tmp.u.effect)
+    if(hasUpgrade("wu",11)) gain = gain.mul(6)
+    if(hasUpgrade("wu",12)) gain = gain.mul(9)
+    if(hasUpgrade("wu",13)) gain = gain.mul(6)
+    if(hasUpgrade("wu",14)) gain = gain.mul(9)
+        
+    if(hasAchievement("achievements","f53")) gain = gain.mul(tmp.p.effect)
+        
+    if(gain.gte(new Decimal(20).factorial())) gain = gain.pow(0.5).mul(new Decimal(20).factorial().pow(0.5))
     return gain
 }
 
@@ -81,7 +142,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-    function(){return (player.f.total.gte(1)||hasUpgrade("a",21)?`Your total Factorials is dividing point gain by /${format(inChallenge("a",12)?player.f.total.mul(2).add(1).factorial().div(hasUpgrade("a",21)?player.a.points.add(1).log(3).add(1):1):inChallenge("a",11)?player.f.total.add(1).factorial().factorial().div(hasUpgrade("a",21)?player.a.points.add(1).log(3).add(1):1):player.f.total.add(1).factorial().div(hasUpgrade("a",21)?player.a.points.add(1).log(3).add(1):1))}`:``)+(getFactorialEquilavent().gte(20)?`<br>Your point gain has been softcapped to the power of 1/2!`:``)}
+    function(){return (player.f.total.gte(1)||hasUpgrade("a",22)?`Your total Factorials is dividing point gain by /${format(inChallenge("a",12)?player.f.total.mul(2).add(1).factorial().div(hasUpgrade("a",22)?tmp.a.effect.root(1.69):1):inChallenge("a",11)?player.f.total.add(1).factorial().factorial().div(hasUpgrade("a",22)?tmp.a.effect.root(1.69):1):player.f.total.add(1).factorial().div(hasUpgrade("a",22)?tmp.a.effect.root(1.69):1))}`:``)+(getPointGen2().gte(new Decimal(20).factorial())?`<br>Your point gain has been softcapped to the power of 1/2!`:``)}
 ]
 
 // Determines when the game "ends"
@@ -92,7 +153,7 @@ function isEndgame() {
 function bingoAttemptTwo() {
     let x = new Decimal(0)
     let totalSum = new Decimal(0)
-    for(i=1;i<5;i++){
+    for(i=1;i<6;i++){
         for(v=1;v<7;v++){
             if(hasAchievement("achievements", "f"+(v+(i*10)))) x=x.add(1)
         }
@@ -101,7 +162,7 @@ function bingoAttemptTwo() {
             x=new Decimal(0)
         }
     }
-    for(i=1;i<2;i++){
+    for(i=1;i<5;i++){
         for(v=1;v<7;v++){
             if(hasAchievement("achievements", "c"+(v+(i*10)))) x=x.add(1)
         }
@@ -111,6 +172,16 @@ function bingoAttemptTwo() {
         }
     }
     return totalSum
+}
+
+function paradoxAch() {
+    let x = new Decimal(0)
+    for(i=1;i<3;i++){
+        for(v=1;v<7;v++){
+            if(hasAchievement("achievements", "p"+(v+(i*10)))) x=x.add(1)
+        }
+    }
+    return x
 }
 
 
