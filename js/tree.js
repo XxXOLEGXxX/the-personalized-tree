@@ -25,6 +25,14 @@ addLayer("tree-tab", {
         "Cookie Tree": {
             content: [["tree", [["bb"]]]],
             unlocked(){return hasAchievement("achievements", "f16")},
+        },
+        "Upgrade Tree": {
+            content: [["tree", [["u"],["wu","ru"]]]],
+            unlocked(){return hasAchievement("achievements", "f43")},
+        },
+        "Paradox Tree": {
+            content: [["tree", [["p"]]]],
+            unlocked(){return hasAchievement("achievements", "f53")},
         }
     },
     previousTab: "",
