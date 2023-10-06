@@ -19,11 +19,11 @@ addNode("blank", {
 addLayer("tree-tab", {
     tabFormat: {
         "Factorial Tree": {
-            content: [["tree", [["f"],["a","c"]]]],
+            content: [["tree", [["f"],["a","c"],["tf"]]]],
             unlocked(){return hasAchievement("achievements", "f16")},
         },
         "Cookie Tree": {
-            content: [["tree", [["bb"]]]],
+            content: [["tree", [["bb","t"],["cookie"]]]],
             unlocked(){return hasAchievement("achievements", "f16")},
         },
         "Upgrade Tree": {
